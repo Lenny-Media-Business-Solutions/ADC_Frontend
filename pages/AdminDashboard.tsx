@@ -84,7 +84,7 @@ const SystemActivityChart = ({ data }: { data: any[] }) => {
   );
 };
 
-export default function AdminDashboard() {
+export function AdminDashboard() {  // Changed from export default function
   const [activeTab, setActiveTab] = useState<'overview' | 'volunteers' | 'programs' | 'projects' | 'impact-stories' | 'news' | 'contact' | 'partnerships'>('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -1378,4 +1378,6 @@ export default function AdminDashboard() {
       </div >
     </div >
   );
-};
+}
+
+export default AdminDashboard; // Added default export
