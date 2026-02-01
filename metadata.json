@@ -1,0 +1,7 @@
+{
+  "name": "Agropastoralists Development Consortium",
+  "description": "Professional website for Agropastoralists Development Consortium (ADC), a Juba-based NGO focused on sustainable livelihoods, peacebuilding, and resilience for pastoralist communities in South Sudan.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
