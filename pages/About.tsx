@@ -97,7 +97,7 @@ export const About: React.FC = () => {
                   </div>
                   <h3 className="text-4xl font-serif font-black italic text-earth-900 mb-8">Our Mission</h3>
                   <p className="text-xl text-earth-600 leading-relaxed font-light">
-                    To enhance the well-being of agropastoral and pastoral communities by fostering sustainable development, promoting resilience, and ensuring preservation and conservation of natural resources.
+                    A humanitarian organization dedicated to bridging development gaps for rural communities.
                   </p>
                 </div>
               </div>

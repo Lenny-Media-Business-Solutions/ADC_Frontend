@@ -59,7 +59,7 @@ export const Home: React.FC = () => {
               <div className="flex items-center gap-4 mb-10">
                 <span className="h-[2px] w-8 sm:w-16 bg-savanna-500" />
                 <span className="text-savanna-400 font-black uppercase tracking-[0.4em] text-[9px] md:text-xs">
-                  Empowering South Sudan
+                  Empowering Rural Communities
                 </span>
                 <span className="h-[2px] w-8 sm:w-16 bg-savanna-500" />
               </div>
@@ -69,7 +69,7 @@ export const Home: React.FC = () => {
               </h1>
 
               <p className="text-lg md:text-2xl text-earth-100/90 mb-14 leading-relaxed max-w-3xl font-light mx-auto">
-                Fostering peaceful coexistence and resilient livelihoods across South Sudan's arid lands through community-led agricultural development.
+                Fostering peaceful coexistence and resilience across South Sudan livelihoods through community-led agricultural development.
               </p>
 
               <div className="flex flex-wrap gap-6 justify-center">
