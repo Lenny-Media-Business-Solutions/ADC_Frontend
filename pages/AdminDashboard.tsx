@@ -26,7 +26,8 @@ import {
   ChevronLeft,
   Filter,
   Eye,
-  MessageSquareQuote
+  MessageSquareQuote,
+  Home
 } from 'lucide-react';
 import { PROGRAMS, PROJECTS } from '../constants';
 import api from '../api';
@@ -385,6 +386,16 @@ export function AdminDashboard() {  // Changed from export default function
             <SidebarItem id="contact" icon={Mail} label="Contact Messages" />
             <SidebarItem id="partnerships" icon={MessageSquare} label="Partnerships" />
           </nav>
+
+          {/* Home Button */}
+          <button
+            onClick={() => window.location.hash = '#/'}
+            className={`flex items-center gap-2 xs:gap-3 lg:gap-4 px-3 xs:px-4 lg:px-6 py-2.5 xs:py-3 lg:py-4 text-earth-400 hover:text-savanna-500 transition-colors ${sidebarCollapsed ? 'justify-center' : ''}`}
+            title={sidebarCollapsed ? 'Back to Website' : ''}
+          >
+            <Home size={16} className="xs:w-[18px] xs:h-[18px] lg:w-5 lg:h-5 flex-shrink-0" />
+            {!sidebarCollapsed && <span className="font-bold text-[10px] xs:text-xs lg:text-sm truncate">Back to Website</span>}
+          </button>
 
           {/* Logout Button */}
           <button
