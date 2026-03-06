@@ -110,7 +110,7 @@ export const Contact: React.FC = () => {
                     </div>
                     <div className="flex flex-col justify-center">
                       <p className="text-[9px] font-black uppercase tracking-[0.3em] text-earth-400 mb-1">State HQ</p>
-                      <p className="text-earth-900 text-lg leading-tight font-bold">Private Bag, Torit, Eastern Equatoria State, South Sudan</p>
+                      <p className="text-earth-900 text-lg leading-tight font-bold">P.O Box 25 Torit/Kapoeta, Eastern Equatoria State, South Sudan</p>
                     </div>
                   </div>
 
@@ -130,7 +130,7 @@ export const Contact: React.FC = () => {
                     </div>
                     <div className="flex flex-col justify-center">
                       <p className="text-[9px] font-black uppercase tracking-[0.3em] text-earth-400 mb-1">Inquiry Line</p>
-                      <p className="text-earth-900 text-lg font-bold">+211 917 317 472</p>
+                      <p className="text-earth-900 text-lg font-bold">+211 917 317 472 / +211 926 593 942</p>
                     </div>
                   </div>
                 </div>

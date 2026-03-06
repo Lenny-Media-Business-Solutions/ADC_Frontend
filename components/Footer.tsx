@@ -87,13 +87,13 @@ export const Footer: React.FC = () => {
               <div className="w-10 h-10 rounded-xl bg-earth-800 flex items-center justify-center flex-shrink-0 text-savanna-500 shadow-lg">
                 <MapPin size={20} />
               </div>
-              <span className="text-earth-300 text-sm leading-relaxed pt-1 font-medium italic">P.O Box Private Bag, Torit, Eastern Equatoria State, South Sudan</span>
+              <span className="text-earth-300 text-sm leading-relaxed pt-1 font-medium italic"> P.O Box 25 Torit/Kapoeta, Eastern Equatoria State, South Sudan</span>
             </li>
             <li className="flex gap-4">
               <div className="w-10 h-10 rounded-xl bg-earth-800 flex items-center justify-center flex-shrink-0 text-savanna-500 shadow-lg">
                 <Phone size={20} />
               </div>
-              <span className="text-earth-300 text-sm leading-relaxed pt-2 font-bold">+211 917 317 472</span>
+              <span className="text-earth-300 text-sm leading-relaxed pt-2 font-bold">+211 917 317 472 / +211 926 593 942</span>
             </li>
             <li className="flex gap-4">
               <div className="w-10 h-10 rounded-xl bg-earth-800 flex items-center justify-center flex-shrink-0 text-savanna-500 shadow-lg">
