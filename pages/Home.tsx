@@ -137,11 +137,11 @@ export const Home: React.FC = () => {
                 <div className="lg:col-span-7">
                   <div className="mb-10">
                     <h2 className="text-4xl md:text-6xl font-serif text-earth-900 mb-8 leading-tight tracking-tighter">
-                      Sustainable <span className="text-gradient">Growth in South Sudan</span>
+                      Sustainable <span className="text-gradient">Growth in parts of South Sudan</span>
                     </h2>
                     <div className="space-y-6 text-earth-600 text-xl leading-relaxed font-light">
                       <p>
-                        From oxen-driven plowing in Bahr el Ghazal to okra harvests in Central Equatoria, ADC supports South Sudanese smallholder farmers.
+                        From Oxen-driven ploughing in Budi County of Eastern Equatoria State. ADC supports small holder farmers through advisory services and technical support.
                       </p>
                       <p>
                         Our integrated approach combines traditional knowledge with modern technical training to build lasting resilience.
