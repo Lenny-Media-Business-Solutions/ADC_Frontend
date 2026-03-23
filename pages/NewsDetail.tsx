@@ -46,11 +46,11 @@ export const NewsDetail: React.FC<NewsDetailProps> = ({ slug }) => {
         );
     }
 
-    const formattedDate = new Date(newsItem.published_date).toLocaleDateString('en-US', {
+    const formattedDate = newsItem.published_date ? new Date(newsItem.published_date).toLocaleDateString('en-US', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
-    });
+    }) : null;
 
     return (
         <div className="pt-32 pb-24 savanna-pattern min-h-screen">
@@ -72,10 +72,12 @@ export const NewsDetail: React.FC<NewsDetailProps> = ({ slug }) => {
                         {newsItem.title}
                     </h1>
                     <div className="flex items-center gap-8 border-y border-earth-100 py-6">
-                        <div className="flex items-center gap-3">
-                            <Calendar size={18} className="text-savanna-500" />
-                            <span className="text-sm font-bold text-earth-500 uppercase tracking-widest">{formattedDate}</span>
-                        </div>
+                        {formattedDate && (
+                            <div className="flex items-center gap-3">
+                                <Calendar size={18} className="text-savanna-500" />
+                                <span className="text-sm font-bold text-earth-500 uppercase tracking-widest">{formattedDate}</span>
+                            </div>
+                        )}
                         <div className="flex items-center gap-3">
                             <Tag size={18} className="text-earth-400" />
                             <span className="text-sm font-bold text-earth-500 uppercase tracking-widest">Field Update</span>

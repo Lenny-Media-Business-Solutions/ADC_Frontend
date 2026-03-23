@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, ChevronRight, Lock } from 'lucide-react';
+import { Mail, Phone, MapPin, ChevronRight, Lock } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const navigate = (e: React.MouseEvent, href: string) => {
@@ -26,13 +26,7 @@ export const Footer: React.FC = () => {
           <p className="text-earth-300 text-base leading-relaxed font-light">
             Dedicated to rights-based development and resilience in the fragile arid lands of South Sudan.
           </p>
-          <div className="flex gap-4">
-            {[Facebook, Twitter, Linkedin].map((Icon, idx) => (
-              <a key={idx} href="#" className="w-10 h-10 rounded-full border border-earth-700 flex items-center justify-center hover:bg-savanna-500 hover:border-savanna-500 transition-all duration-300">
-                <Icon size={18} />
-              </a>
-            ))}
-          </div>
+
         </div>
 
         <div className="lg:col-span-2">
@@ -115,12 +109,6 @@ export const Footer: React.FC = () => {
         <div className="flex flex-wrap justify-center gap-8 items-center">
           <button className="hover:text-white transition-colors font-black uppercase tracking-widest text-[10px]">Privacy Policy</button>
           <button className="hover:text-white transition-colors font-black uppercase tracking-widest text-[10px]">Terms of Service</button>
-          <button
-            onClick={(e) => navigate(e, '#/admin')}
-            className="flex items-center gap-2 px-4 py-2 bg-earth-800 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-earth-700 hover:text-savanna-500 transition-all border border-earth-700"
-          >
-            <Lock size={12} /> Staff Portal
-          </button>
         </div>
       </div>
     </footer>

@@ -26,6 +26,7 @@ import {
   ChevronLeft,
   Filter,
   Eye,
+  EyeOff,
   MessageSquareQuote,
   Home
 } from 'lucide-react';
@@ -85,8 +86,8 @@ const SystemActivityChart = ({ data }: { data: any[] }) => {
   );
 };
 
-export function AdminDashboard() {  // Changed from export default function
-  const [activeTab, setActiveTab] = useState<'overview' | 'volunteers' | 'programs' | 'projects' | 'impact-stories' | 'news' | 'contact' | 'partnerships'>('overview');
+export function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState<'overview' | 'volunteers' | 'programs' | 'projects' | 'impact-stories' | 'news' | 'contact' | 'partnerships' | 'settings'>('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
@@ -101,6 +102,10 @@ export function AdminDashboard() {  // Changed from export default function
   const [loadingVolunteers, setLoadingVolunteers] = useState(true);
   const [contactMessages, setContactMessages] = useState<any[]>([]);
   const [partnerships, setPartnerships] = useState<any[]>([]);
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const [showSettingsPassword, setShowSettingsPassword] = useState(false);
+  const [settingsError, setSettingsError] = useState('');
+  const [settingsSuccess, setSettingsSuccess] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<{ type: string, id: string | string[], title?: string } | null>(null);
@@ -114,7 +119,43 @@ export function AdminDashboard() {  // Changed from export default function
     fetchImpactStories();
     fetchContactMessages();
     fetchPartnerships();
+    fetchUserProfile();
+
+    // Inactivity Timeout (30 minutes)
+    let timeoutId: NodeJS.Timeout;
+    const handleActivity = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        alert('Your session has expired due to 30 minutes of inactivity.');
+        handleLogout();
+      }, 30 * 60 * 1000); // 30 minutes
+    };
+
+    window.addEventListener('mousemove', handleActivity);
+    window.addEventListener('keydown', handleActivity);
+    window.addEventListener('click', handleActivity);
+    window.addEventListener('scroll', handleActivity);
+    
+    // Initialize timer
+    handleActivity();
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('mousemove', handleActivity);
+      window.removeEventListener('keydown', handleActivity);
+      window.removeEventListener('click', handleActivity);
+      window.removeEventListener('scroll', handleActivity);
+    };
   }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const response = await api.get('users/me/');
+      setUserProfile(response.data);
+    } catch (err) {
+      console.error('Failed to fetch user info', err);
+    }
+  };
 
   const fetchPrograms = async () => {
     try {
@@ -385,6 +426,8 @@ export function AdminDashboard() {  // Changed from export default function
             <SidebarItem id="news" icon={Newspaper} label="News / Dispatches" />
             <SidebarItem id="contact" icon={Mail} label="Contact Messages" />
             <SidebarItem id="partnerships" icon={MessageSquare} label="Partnerships" />
+            <div className="my-2 border-t border-earth-800/50"></div>
+            <SidebarItem id="settings" icon={Settings} label="Admin Settings" />
           </nav>
 
           {/* Home Button */}
@@ -998,6 +1041,138 @@ export function AdminDashboard() {  // Changed from export default function
             </div>
           )}
 
+          {/* Settings Tab */}
+          {activeTab === 'settings' && (
+            <div className="bg-white rounded-xl xs:rounded-2xl sm:rounded-[3rem] border border-earth-100 shadow-xl p-3 xs:p-4 sm:p-6 lg:p-10 animate-fade-up">
+              <div className="flex flex-col mb-4 xs:mb-6 sm:mb-8 lg:mb-10 gap-2">
+                <h3 className="text-base xs:text-lg sm:text-xl lg:text-2xl font-bold text-earth-900 leading-tight">Admin Settings</h3>
+                <p className="text-xs text-earth-500">Update your dashboard access credentials and profile details.</p>
+              </div>
+
+              {settingsError && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm flex items-start gap-3 animate-fade-in">
+                  <XCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                  <p>{settingsError}</p>
+                </div>
+              )}
+
+              {settingsSuccess && (
+                <div className="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl text-sm flex items-start gap-3 animate-fade-in">
+                  <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                  <p>{settingsSuccess}</p>
+                </div>
+              )}
+
+              {userProfile ? (
+                <form 
+                  className="space-y-4 xs:space-y-6 max-w-2xl bg-earth-50 p-6 rounded-[2rem] border border-earth-100"
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    setSettingsError('');
+                    setSettingsSuccess('');
+                    const formData = new FormData(e.currentTarget);
+                    
+                    const password = formData.get('password') as string;
+                    if (password) {
+                      const isValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/.test(password);
+                      if (!isValid) {
+                        setSettingsError("Password must be at least 8 characters long and contain one uppercase letter, one lowercase letter, and one special character.");
+                        return;
+                      }
+                    }
+
+                    // Don't send empty fields
+                    const payload: any = {};
+                    formData.forEach((value, key) => {
+                      if (value) payload[key] = value;
+                    });
+
+                    try {
+                      await api.patch('users/me/', payload);
+                      setSettingsSuccess('Settings successfully updated! If you changed your credentials, you will be logged out shortly.');
+                      
+                      setTimeout(() => {
+                        if (payload.password || payload.username !== userProfile.username) {
+                          handleLogout();
+                        } else {
+                          fetchUserProfile();
+                          setSettingsSuccess('');
+                        }
+                      }, 2500);
+                    } catch (err: any) {
+                      console.error('Failed to update settings', err);
+                      setSettingsError(err.response?.data?.detail || 'Failed to update settings. Please verify your inputs.');
+                    }
+                  }}
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 xs:gap-6">
+                    <div className="space-y-1.5 xs:space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-earth-400 ml-2">Username</label>
+                      <input 
+                        name="username" 
+                        type="text" 
+                        defaultValue={userProfile.username || ''}
+                        required
+                        className="w-full bg-white border-2 border-transparent rounded-2xl px-4 py-3 focus:border-savanna-500 transition-all font-bold text-sm text-earth-900" 
+                      />
+                    </div>
+                    <div className="space-y-1.5 xs:space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-earth-400 ml-2">Email Address</label>
+                      <input 
+                        name="email" 
+                        type="email" 
+                        defaultValue={userProfile.email || ''}
+                        required
+                        className="w-full bg-white border-2 border-transparent rounded-2xl px-4 py-3 focus:border-savanna-500 transition-all font-bold text-sm text-earth-900" 
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-1.5 xs:space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-earth-400 ml-2">Full Name</label>
+                    <input 
+                      name="full_name" 
+                      type="text" 
+                      defaultValue={userProfile.full_name || ''}
+                      required
+                      className="w-full bg-white border-2 border-transparent rounded-2xl px-4 py-3 focus:border-savanna-500 transition-all font-bold text-sm text-earth-900" 
+                    />
+                  </div>
+                  
+                  <div className="space-y-1.5 xs:space-y-2 pt-4 border-t border-earth-200">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-earth-400 ml-2">New Password <span className="text-earth-300 font-medium normal-case">(Optional)</span></label>
+                    <div className="relative">
+                      <input 
+                        name="password" 
+                        type={showSettingsPassword ? 'text' : 'password'}
+                        placeholder="Leave blank to keep current password"
+                        className="w-full bg-white border-2 border-transparent rounded-2xl pl-4 pr-12 py-3 focus:border-savanna-500 transition-all font-bold text-sm text-earth-900" 
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowSettingsPassword(!showSettingsPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-earth-400 hover:text-savanna-500 transition-colors"
+                      >
+                        {showSettingsPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-2">
+                    <button 
+                      type="submit" 
+                      className="w-full bg-earth-900 hover:bg-savanna-500 text-white rounded-2xl py-4 font-black transition-all shadow-lg active:scale-95"
+                    >
+                      Save Settings Let's Update
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div className="p-8 text-center text-earth-400 animate-pulse font-serif italic text-xl">Loading your profile details...</div>
+              )}
+            </div>
+          )}
+
         </main>
 
         {/* CRUD Modal */}
@@ -1199,6 +1374,18 @@ export function AdminDashboard() {  // Changed from export default function
                           className="w-full bg-earth-50 border-2 border-transparent rounded-lg xs:rounded-xl sm:rounded-2xl px-3 xs:px-4 sm:px-5 lg:px-6 py-2 xs:py-2.5 sm:py-3 lg:py-4 focus:bg-white focus:border-savanna-500 focus:outline-none transition-all text-xs xs:text-sm sm:text-base"
                         />
                       </div>
+
+                      {editingItem.type === 'news' && (
+                        <div className="space-y-1.5 xs:space-y-2">
+                          <label className="text-[8px] xs:text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-earth-400 ml-2 xs:ml-3 sm:ml-4">Publish Date (Optional)</label>
+                          <input
+                            type="date"
+                            name="published_date"
+                            defaultValue={editingItem.data.published_date || ''}
+                            className="w-full bg-earth-50 border-2 border-transparent rounded-lg xs:rounded-xl sm:rounded-2xl px-3 xs:px-4 sm:px-5 lg:px-6 py-2 xs:py-2.5 sm:py-3 lg:py-4 focus:bg-white focus:border-savanna-500 focus:outline-none transition-all text-xs xs:text-sm sm:text-base"
+                          />
+                        </div>
+                      )}
 
                       {editingItem.type === 'projects' && (
                         <>

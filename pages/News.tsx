@@ -24,7 +24,7 @@ export const News: React.FC = () => {
   // Map news dynamic data to frontend NewsItem type
   const uniqueNews = dynamicNews.map(item => ({
     ...item,
-    date: new Date(item.published_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+    date: item.published_date ? new Date(item.published_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : null,
     category: 'Field Dispatch',
   }));
 
@@ -71,9 +71,11 @@ export const News: React.FC = () => {
                   </div>
                   <div className="md:w-1/2 p-6 xs:p-8 sm:p-10 flex flex-col justify-center">
                     <div className="flex flex-wrap items-center gap-2 xs:gap-3 sm:gap-4 text-[10px] font-black text-earth-400 uppercase tracking-[0.2em] mb-4 xs:mb-6">
-                      <span className="flex items-center gap-2 bg-earth-50 px-3 py-1 rounded-full text-earth-600 whitespace-nowrap">
-                        <Calendar size={12} className="text-savanna-500" /> {item.date}
-                      </span>
+                      {item.date && (
+                        <span className="flex items-center gap-2 bg-earth-50 px-3 py-1 rounded-full text-earth-600 whitespace-nowrap">
+                          <Calendar size={12} className="text-savanna-500" /> {item.date}
+                        </span>
+                      )}
                       <span className="flex items-center gap-2 bg-savanna-50 px-3 py-1 rounded-full text-savanna-600 whitespace-nowrap">
                         <Tag size={12} /> {item.category}
                       </span>

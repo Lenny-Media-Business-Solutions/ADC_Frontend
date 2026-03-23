@@ -16,7 +16,15 @@ import { Login } from './pages/Login';
 import { TrainingServices } from './pages/TrainingServices';
 
 const App: React.FC = () => {
-  const [currentPath, setCurrentPath] = useState(window.location.hash || '#/');
+  const [currentPath, setCurrentPath] = useState(() => {
+    const p = window.location.pathname.replace(/\/$/, '');
+    if (p && p !== '/' && !window.location.hash) {
+      const newHash = '/#' + p;
+      window.history.replaceState(null, '', newHash);
+      return '#' + p;
+    }
+    return window.location.hash || '#/';
+  });
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -70,20 +78,20 @@ const App: React.FC = () => {
     if (path === '#/volunteer') return <Volunteer />;
 
     // Admin (Staff Portal)
-    if (path === '#/admin') {
+    if (path === '#/secure-admin-9056/dashboard') {
       const isAuthenticated = !!localStorage.getItem('access_token');
       return isAuthenticated ? <AdminDashboard /> : <Login />;
     }
 
     // Login
-    if (path === '#/login') return <Login />;
+    if (path === '#/secure-admin-9056/login' || path === '#/secure-admin-9056/login/') return <Login />;
 
-    // Fallback
+    // Fallback (404 Not Found)
     return (
       <div className="pt-32 pb-20 min-h-screen bg-earth-50 flex items-center justify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-white rounded-[3rem] py-24 border border-earth-100 shadow-sm">
-          <h1 className="text-4xl font-serif text-earth-900 mb-6 font-black">Section Under Development</h1>
-          <p className="text-earth-600 text-lg mb-8 max-w-xl mx-auto font-light leading-relaxed">This section is being updated with ADC's latest program data and community narratives.</p>
+          <h1 className="text-4xl font-serif text-earth-900 mb-6 font-black">Page Not Found</h1>
+          <p className="text-earth-600 text-lg mb-8 max-w-xl mx-auto font-light leading-relaxed">The page or section you are looking for does not exist or has been moved.</p>
           <button
             onClick={() => window.location.hash = '#/'}
             className="bg-savanna-500 text-white px-10 py-4 rounded-full font-black text-sm uppercase tracking-widest shadow-xl shadow-savanna-500/20 active:scale-95 transition-all"
@@ -95,7 +103,7 @@ const App: React.FC = () => {
     );
   };
 
-  const isAdminPath = currentPath.toLowerCase().startsWith('#/admin') || currentPath.toLowerCase().startsWith('#/login');
+  const isAdminPath = currentPath.toLowerCase().startsWith('#/secure-admin-9056/dashboard') || currentPath.toLowerCase().startsWith('#/secure-admin-9056/login');
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
