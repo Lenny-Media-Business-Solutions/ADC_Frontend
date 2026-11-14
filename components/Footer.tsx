@@ -94,10 +94,10 @@ export const Footer: React.FC = () => {
                 <Mail size={20} />
               </div>
               <a
-                href="mailto:agrodevcon@gmail.com"
+                href="mailto:info@agropastoralists.org"
                 className="text-earth-300 text-sm leading-relaxed pt-2 font-bold hover:text-savanna-500 transition-colors"
               >
-                agrodevcon@gmail.com
+                info@agropastoralists.org
               </a>
             </li>
           </ul>

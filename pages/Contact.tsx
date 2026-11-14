@@ -120,7 +120,7 @@ export const Contact: React.FC = () => {
                     </div>
                     <div className="flex flex-col justify-center">
                       <p className="text-[9px] font-black uppercase tracking-[0.3em] text-earth-400 mb-1">Official Email</p>
-                      <p className="text-earth-900 text-lg font-bold">agrodevcon@gmail.com</p>
+                      <p className="text-earth-900 text-lg font-bold">info@agropastoralists.org</p>
                     </div>
                   </div>
 
