@@ -84,7 +84,12 @@ const App: React.FC = () => {
     }
 
     // Login
-    if (path === '#/secure-admin-9056/login' || path === '#/secure-admin-9056/login/') return <Login />;
+    if (path === '#/login' || path === '#/login/' || path === '#/secure-admin-9056/login' || path === '#/secure-admin-9056/login/') {
+      if (path.startsWith('#/secure-admin-9056/login')) {
+        window.history.replaceState(null, '', '/#/login');
+      }
+      return <Login />;
+    }
 
     // Fallback (404 Not Found)
     return (
@@ -103,7 +108,7 @@ const App: React.FC = () => {
     );
   };
 
-  const isAdminPath = currentPath.toLowerCase().startsWith('#/secure-admin-9056/dashboard') || currentPath.toLowerCase().startsWith('#/secure-admin-9056/login');
+  const isAdminPath = currentPath.toLowerCase().startsWith('#/secure-admin-9056/dashboard') || currentPath.toLowerCase().startsWith('#/secure-admin-9056/login') || currentPath.toLowerCase() === '#/login' || currentPath.toLowerCase() === '#/login/';
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
