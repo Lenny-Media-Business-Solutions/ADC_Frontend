@@ -18,6 +18,9 @@ import { TrainingServices } from './pages/TrainingServices';
 const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState(() => {
     const p = window.location.pathname.replace(/\/$/, '');
+    if (p.toLowerCase() === '/login' && !window.location.hash) {
+      return '/login';
+    }
     if (p && p !== '/' && !window.location.hash) {
       const newHash = '/#' + p;
       window.history.replaceState(null, '', newHash);
@@ -31,13 +34,31 @@ const App: React.FC = () => {
       setCurrentPath(window.location.hash || '#/');
       window.scrollTo(0, 0);
     };
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname.toLowerCase() === '/login' ? '/login' : window.location.hash || '#/');
+      window.scrollTo(0, 0);
+    };
 
     window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('popstate', handlePopState);
+    };
   }, []);
+
+  useEffect(() => {
+    const path = currentPath.toLowerCase();
+    if (path === '#/secure-admin-9056/login' || path === '#/secure-admin-9056/login/') {
+      window.history.replaceState(null, '', '/login');
+      setCurrentPath('/login');
+    }
+  }, [currentPath]);
 
   const renderPage = () => {
     const path = currentPath.toLowerCase();
+
+    if (path === '/login') return <Login />;
 
     // Home
     if (path === '#' || path === '#/') return <Home />;
@@ -103,7 +124,7 @@ const App: React.FC = () => {
     );
   };
 
-  const isAdminPath = currentPath.toLowerCase().startsWith('#/secure-admin-9056/dashboard') || currentPath.toLowerCase().startsWith('#/secure-admin-9056/login');
+  const isAdminPath = currentPath.toLowerCase() === '/login' || currentPath.toLowerCase().startsWith('#/secure-admin-9056/dashboard') || currentPath.toLowerCase().startsWith('#/secure-admin-9056/login');
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
